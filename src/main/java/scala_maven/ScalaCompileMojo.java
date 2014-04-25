@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.maven.model.Dependency;
+import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugin.MojoFailureException;
 
 /**
  * Compiles a directory of Scala source. Corresponds roughly to the compile goal
@@ -38,6 +40,15 @@ public class ScalaCompileMojo extends ScalaCompilerSupport {
      */
     protected File analysisCacheFile;
 
+    @Override
+    public void execute() throws MojoExecutionException, MojoFailureException {
+        super.execute();
+        
+        if (outputDir.isDirectory()) {
+            project.getArtifact().setFile(outputDir);
+        }
+    }
+    
     @Override
     protected List<File> getSourceDirectories() throws Exception {
         List<String> sources = project.getCompileSourceRoots();
